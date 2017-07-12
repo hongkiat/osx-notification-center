@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>
+OSX Notification Center
+</title>
+
+<!--  jquery -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="../_nav/js/jquery.js"><\/script>')</script>
+
+<!-- demo scripts -->
+<link rel="stylesheet" href="css/normalize.css">
+<link rel="stylesheet" href="css/styles.css">
+
+<script type="text/javascript">
+$(function() {
+		var notify = function(title, options) {
+		    if(window.Notification) {
+			    $('.no-support').hide();
+			    console.log(Notification.permissionLevel());
+			    if(Notification.permissionLevel() === 'default') {
+			        Notification.requestPermission(function() {
+			            notify(title, options);
+			        });
+			    }
+			    else if(Notification.permissionLevel() === 'granted') {
+			    	$('.no-permission').hide();
+			        var welcome = new Notification(title, options);
+			    }
+			    else if(Notification.permissionLevel() === 'denied') {
+			    	$('.support, .no-support, .notify-click').hide();	
+			    }
+		    } else if(!window.Notification) {
+		    	$('.support, .no-permission, .notify-click').hide();
+		    }
+		};
+
+	notify('Hello World', { body: 'Welcome to our website', tags: 'note1'});
+
+	$('.button').on('click', function() {
+        notify('Clicked', { body: 'You just clicked the button', tags: 'note2' });
+	});	
+});
+</script>
+
+<!-- nav script -->
+<script src="../_nav/js/nav.js" type="text/javascript"></script>
+</head>
+
+<body>
+
+<!-- nav meta -->
+<div class="demo-meta">
+  <h1 class="demo-title">OSX Notification Center</h1>
+  <p class="demo-desc">Notification Center comes to OSX. We are actually able to add this feature on your website and this demo shows you how it is in action.</p>
+</div>
+
+<!-- demo content -->
+<div class="demo-wrapper">
+	<div class="notify-support">
+		<p class="alert support">Awesome, your browser supports Notification Center feature.</p>
+		<p class="alert no-support">Unfortunately, your browser does not support Notification Center feature. If it does, you should see somthing as shown in this screenshot below.</p>
+		<p class="alert no-permission">You have denied to show the Notification. You can enable it from the <strong>Preference</strong> options.</p>
+
+		<!-- images  -->
+		<img src="img/no-support.png" class="no-support" alt="" width="500" height="300">
+		<img src="img/notification-permission.png" class="no-permission" alt="" width="500" height="300">
+	</div>
+
+	<div class="notify-click">
+		<small>Alternatively, you can also click on this button to get notified.</small>
+		<a href="#" class="button">Notify Me Again!</a>
+	</div>
+</div>
+
+</body>
+</html>
