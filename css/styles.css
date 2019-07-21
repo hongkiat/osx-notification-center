@@ -11,7 +11,7 @@ body {
 	display: block;
 	color: #555;
 }
-.demo-wrapper a.button {
+.demo-wrapper button {
 	display: block;
     width: 150px;
     height: 30px;
@@ -37,7 +37,7 @@ body {
     background: linear-gradient(top,  #fefefe 0%,#eaeaea 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fefefe', endColorstr='#eaeaea',GradientType=0 );
 }
-.demo-wrapper  a.button:hover {
+.demo-wrapper  button:hover {
     color: #787878;
     text-shadow:0px 1px 0px #fff;
     background: #fefefe;
@@ -70,4 +70,12 @@ body {
 	background-color: #d34742;
 	color: #fff;
 	border-color: #a52e2a;
+}
+
+.demo-wrapper .notify-click {
+    margin-top: 80px;
+}
+
+.demo-wrapper .notify-click button {
+    margin-top: 20px;
 }
