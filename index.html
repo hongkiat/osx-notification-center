@@ -1,13 +1,10 @@
 <!doctype html>
 <html lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>
-OSX Notification Center
-</title>
+<title>OSX Notification Center</title>
 
 <!--  jquery -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="../_nav/js/jquery.js"><\/script>')</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 <!-- demo scripts -->
 <link rel="stylesheet" href="css/normalize.css">
@@ -15,37 +12,42 @@ OSX Notification Center
 
 <script type="text/javascript">
 $(function() {
-		var notify = function(title, options) {
-		    if(window.Notification) {
-			    $('.no-support').hide();
-			    console.log(Notification.permissionLevel());
-			    if(Notification.permissionLevel() === 'default') {
-			        Notification.requestPermission(function() {
-			            notify(title, options);
-			        });
-			    }
-			    else if(Notification.permissionLevel() === 'granted') {
-			    	$('.no-permission').hide();
-			        var welcome = new Notification(title, options);
-			    }
-			    else if(Notification.permissionLevel() === 'denied') {
-			    	$('.support, .no-support, .notify-click').hide();
-			    }
-		    } else if(!window.Notification) {
-		    	$('.support, .no-permission, .notify-click').hide();
-		    }
-		};
 
-	notify('Hello World', { body: 'Welcome to our website', tags: 'note1'});
+	function notifyMe( title, options ) {
+		// Let's check if the browser supports notifications
+		if ( ! ( "Notification" in window ) ) {
+			$('.support, .no-permission, .notify-click').hide();
+			return;
+		} 
+		
+		$( '.no-support' ).hide();
+
+		// Let's check whether notification permissions have already been granted.
+		if (Notification.permission === "granted") {
+			$( '.no-permission' ).hide();
+			var notification = new Notification( title, options );
+		} 
+
+		// Otherwise, we need to ask the user for permission.
+		else if (Notification.permission !== "denied") {
+			Notification.requestPermission().then(function ( permission ) {
+				if (permission === "granted") {
+					$( '.no-permission' ).hide();
+					var notification = new Notification( title, options );
+				}
+			});
+		}
+	}
+	
+	notifyMe( 'Hi, there! 👋', { body: 'Welcome to our website' });
 
 	$('.button').on('click', function() {
-        notify('Clicked', { body: 'You just clicked the button', tags: 'note2' });
+		notifyMe( 'Hi, there 👋', { body: 'You\'ve just clicked the button.' });
 	});
 });
 </script>
 
 <!-- nav script -->
-<script src="../_nav/js/nav.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -62,10 +64,6 @@ $(function() {
 		<p class="alert support">Awesome, your browser supports Notification Center feature.</p>
 		<p class="alert no-support">Unfortunately, your browser does not support Notification Center feature. If it does, you should see somthing as shown in this screenshot below.</p>
 		<p class="alert no-permission">You have denied to show the Notification. You can enable it from the <strong>Preference</strong> options.</p>
-
-		<!-- images  -->
-		<img src="img/no-support.png" class="no-support" alt="" width="500" height="300">
-		<img src="img/notification-permission.png" class="no-permission" alt="" width="500" height="300">
 	</div>
 
 	<div class="notify-click">
